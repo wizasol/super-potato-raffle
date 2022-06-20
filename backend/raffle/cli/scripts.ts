@@ -12,13 +12,13 @@ import {
 import { TOKEN_PROGRAM_ID, AccountLayout, MintLayout, ASSOCIATED_TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 import fs from 'fs';
-import { GlobalPool, RafflePool } from './types';
+import { CollectionPool, GlobalPool, RafflePool } from './types';
 import { publicKey } from '@project-serum/anchor/dist/cjs/utils';
 import { Raffle } from '../target/types/raffle';
 
 const GLOBAL_AUTHORITY_SEED = "global-authority";
 const TREASURY_WALLET = new PublicKey('Am9xhPPVCfDZFDabcGgmQ8GTMdsbqEt1qVXbyhTxybAp');
-const PROGRAM_ID = "7MMzz4qVhETUqWv2JqcDxqGxSc1Ko7GmH63SD8dMBKWJ";
+const PROGRAM_ID = "3qJm618bPvosqjFZqMjrUYgVXNKGDPBmTVRMqHar92DK";
 
 const METAPLEX = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
 
@@ -50,14 +50,15 @@ const main = async () => {
         program.programId
     );
     console.log('GlobalAuthority: ', globalAuthority.toBase58());
+    // console.log(await getCollectionState());
 
-    // await initProject();
+    await initProject();
     // await addCollection(payer.publicKey, new PublicKey('GYq1mi8dh18nRAHbtdDuWiVRu4oAuSNzxoy3qStqX4RA'));
     // await createRaffle(payer.publicKey, new PublicKey("FLuGogNV1UPns65SCz8ZLBnPx1P9EtcjVphvbyg2t6ix"), 1, 1654249100, 100);
     // await buyTicket(payer.publicKey, new PublicKey("FLuGogNV1UPns65SCz8ZLBnPx1P9EtcjVphvbyg2t6ix"), 5);
     // await revealWinner(payer.publicKey, new PublicKey("FLuGogNV1UPns65SCz8ZLBnPx1P9EtcjVphvbyg2t6ix"));
     // await claimReward(payer.publicKey, new PublicKey("FLuGogNV1UPns65SCz8ZLBnPx1P9EtcjVphvbyg2t6ix"));
-    await withdrawNft(payer.publicKey, new PublicKey("FLuGogNV1UPns65SCz8ZLBnPx1P9EtcjVphvbyg2t6ix"));
+    // await withdrawNft(payer.publicKey, new PublicKey("FLuGogNV1UPns65SCz8ZLBnPx1P9EtcjVphvbyg2t6ix"));
 
     // const pool = await getRaffleState(new PublicKey("FLuGogNV1UPns65SCz8ZLBnPx1P9EtcjVphvbyg2t6ix"));
     // console.log(pool);
@@ -495,6 +496,23 @@ export const getGlobalState = async (): Promise<GlobalPool | null> => {
     try {
         let state = await program.account.globalPool.fetch(globalAuthority);
         return state as unknown as GlobalPool;
+    } catch {
+        return null;
+    }
+}
+
+export const getCollectionState = async (): Promise<CollectionPool | null> => {
+    let state: GlobalPool = await getGlobalState()
+    let admin = state.superAdmin;
+    let collection = await PublicKey.createWithSeed(
+        admin,
+        "collection-pool",
+        program.programId,
+    );
+
+    try {
+        let state = await program.account.collectionPool.fetch(collection);
+        return state as unknown as CollectionPool;
     } catch {
         return null;
     }

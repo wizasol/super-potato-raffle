@@ -309,7 +309,7 @@
             "type": "u64"
           },
           {
-            "name": "colletions",
+            "name": "collections",
             "type": {
               "array": [
                 "publicKey",
@@ -364,6 +364,10 @@
           {
             "name": "winnerIndex",
             "type": "u64"
+          },
+          {
+            "name": "winner",
+            "type": "publicKey"
           },
           {
             "name": "entrants",

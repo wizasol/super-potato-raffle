@@ -6,4 +6,4 @@ pub const MAX_COLLECTION: usize = 400;
 
 pub const COMMISSION_FEE: u64 = 5;
 
-pub const DAY: i64 = 60 * 60; //* 24;
+pub const DAY: i64 = 60 * 60 * 24;

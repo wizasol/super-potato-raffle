@@ -1,7 +1,7 @@
 [features]
 seeds = false
 [programs.devnet]
-raffle = "7MMzz4qVhETUqWv2JqcDxqGxSc1Ko7GmH63SD8dMBKWJ"
+raffle = "3qJm618bPvosqjFZqMjrUYgVXNKGDPBmTVRMqHar92DK"
 
 [registry]
 url = "https://anchor.projectserum.com"

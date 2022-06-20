@@ -17,7 +17,7 @@ use constants::*;
 use error::*;
 use utils::*;
 
-declare_id!("7MMzz4qVhETUqWv2JqcDxqGxSc1Ko7GmH63SD8dMBKWJ");
+declare_id!("3qJm618bPvosqjFZqMjrUYgVXNKGDPBmTVRMqHar92DK");
 
 #[program]
 pub mod raffle {
@@ -83,13 +83,13 @@ pub mod raffle {
             let mut valid: u8 = 0;
             for creator in creators {
                 for j in 0..collection.count  {
-                    if creator.address == collection.colletions[j as usize] && creator.verified == true
+                    if creator.address == collection.collections[j as usize] && creator.verified == true
                     {
                         valid = 1;
                         break;
                     }
                 }
-                if valid ==1 {
+                if valid == 1 {
                     break;
                 }
             }
@@ -231,7 +231,7 @@ pub mod raffle {
         let winner_index = mul % raffle.count;
         raffle.winner_index = winner_index;
         raffle.winner = raffle.entrants[winner_index as usize];
-
+        raffle.claimed = 2;
         Ok(())
     }
 
