@@ -21,23 +21,23 @@ impl GlobalPool {
 #[account(zero_copy)]
 pub struct CollectionPool {
     // 32*400+8+8 = 12816
-    pub count: u64,                          // 8
-    pub colletions: [Pubkey; MAX_COLLECTION], //32*400
+    pub count: u64,                            // 8
+    pub collections: [Pubkey; MAX_COLLECTION], //32*400
 }
 
 #[account(zero_copy)]
 pub struct RafflePool {
     // 32*2000+8*9 +96 = 64168
-    pub creator: Pubkey,       //32
-    pub nft_mint: Pubkey,      //32
-    pub count: u64,            //8
-    pub no_repeat: u64,        //8
-    pub max_entrants: u64,     //8
-    pub start_timestamp: i64,  //8
-    pub end_timestamp: i64,    //8
-    pub ticket_price_sol: u64, //8
-    pub claimed: u64,          //8
-    pub winner_index: u64,     //8
+    pub creator: Pubkey,                  //32
+    pub nft_mint: Pubkey,                 //32
+    pub count: u64,                       //8
+    pub no_repeat: u64,                   //8
+    pub max_entrants: u64,                //8
+    pub start_timestamp: i64,             //8
+    pub end_timestamp: i64,               //8
+    pub ticket_price_sol: u64,            //8
+    pub claimed: u64,                     //8
+    pub winner_index: u64,                //8
     pub winner: Pubkey,                   //32
     pub entrants: [Pubkey; MAX_ENTRANTS], //32*2000
 }
@@ -67,7 +67,7 @@ impl Default for CollectionPool {
     fn default() -> CollectionPool {
         CollectionPool {
             count: 0,
-            colletions: [Pubkey::default(); MAX_COLLECTION],
+            collections: [Pubkey::default(); MAX_COLLECTION],
         }
     }
 }
@@ -79,7 +79,16 @@ impl RafflePool {
 }
 impl CollectionPool {
     pub fn append(&mut self, collection: Pubkey) {
-        self.colletions[self.count as usize] = collection;
-        self.count += 1;
+        let mut valid: u8 = 0;
+        for i in 0..self.count {
+            if self.collections[i as usize] == collection {
+                valid = 1;
+                break;
+            }
+        }
+        if valid == 0 {
+            self.collections[self.count as usize] = collection;
+            self.count += 1;
+        }
     }
 }
